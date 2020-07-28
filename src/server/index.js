@@ -90,7 +90,6 @@ app.get('/getTorrent/:movieName', async (req, res) => {
 
 
 
-
 app.listen(80, _ => {
     console.log("Listening on 80 open http://127.0.0.1:80/");
 });
