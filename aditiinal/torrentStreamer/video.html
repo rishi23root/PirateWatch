@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video Player</title>
+    <style>
+        body {
+            margin: auto auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            padding: 1.5em;
+        }
+
+        .info,
+        .video {
+            text-align: center;
+            font-size: 3em;
+        }
+
+        .container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            height: 50%;
+            overflow: hidden;
+        }
+
+        video {
+            width: 95%    !important;
+            height: auto   !important;
+            margin: 0.5em;
+            padding: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="info">
+        Just put the magnet link in the url like /{magnet-URI}
+    </div>
+    <div class="video cointainer">
+        <video controls loop autoplay muted>
+            <source id="source" src="/video/" +(location.pathname+location.search).substr(1) type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</body>
+<script defer>
+    let magnet = (location.pathname + location.search).substr(1)
+    console.log(encodeURIComponent(magnet));
+    document.getElementById("source").src = "/video/" + encodeURIComponent(magnet)
+</script>
+
+</html>
