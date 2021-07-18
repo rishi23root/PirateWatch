@@ -14,7 +14,7 @@ const notStreamingFileSize = 2 * (1024 ** 2) // 2mb
 
 
 // try to update it for concurouncy and in the threading 
-setImmediate
+// setImmediate
 
 class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
