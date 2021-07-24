@@ -1,5 +1,6 @@
 const torrent = require('./streamer/torrent')
 const app = require('express')();
+const TorrentApi = require('./utils/torrentApi')
 
 const store = {};
 const xMinutes = 10;
@@ -76,6 +77,19 @@ app.get('/video/:videoName', async (req, res, next) => {
         .status(400)
         .send("Requires Range header and valid video name ")
 })
+
+
+// get torrent info
+app.get('/getTorrent/:movieName', async (req, res) => {
+    const name = req.params.movieName;
+    const jsondata = await TorrentApi(name)
+    console.log(name)
+    res.status(200);
+    res.json(jsondata);
+})
+
+
+
 
 app.listen(80, _ => {
     console.log("Listening on 80 open http://127.0.0.1:80/");
