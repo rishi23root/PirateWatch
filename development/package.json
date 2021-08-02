@@ -1,0 +1,24 @@
+{
+  "name": "pirate_watch",
+  "version": "1.0.0",
+  "description": "prirete watch will be a site\r which can download the movie and stream them from torent sites",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "jsdom": "^16.6.0",
+    "node-fetch": "^2.6.1",
+    "node-html-parser": "^4.1.2",
+    "node-pre-gyp": "^0.17.0",
+    "nodemon": "^2.0.12",
+    "torrent-stream": "^1.2.1"
+  }
+}
