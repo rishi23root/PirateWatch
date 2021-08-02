@@ -1,4 +1,4 @@
-*node_modules/*
+**/node_modules/*
 node_modules/
 build/
 dist/
@@ -6,4 +6,5 @@ npm-debug.log*
 .vscode/
 .idea
 *.iml
-*/package-lock.json
+**/package-lock.json
+*.mp4
