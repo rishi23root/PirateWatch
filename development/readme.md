@@ -1,6 +1,5 @@
 for linux 
 first intall - npm i node-pre-gyp
-then webtorrent or hybrid 
 
 ### file which handle data extraction
 1. get the metadata of the files 

@@ -5,6 +5,7 @@ let megLink = "magnet:?xt=urn:btih:7A4214FE458B4B70BF18905E2CF3AE9BE11D8B2C&dn=B
 // client.add(torrentId, { store: require('memory-chunk-store') }, (torrent) => {
 //   torrent.files[0].createReadStream({start, end})
 // })
+// from https://github.com/webtorrent/webtorrent/issues/1562#issuecomment-450767381
 
 funtion to convert the data into hash
 first extract the torrent files info with all possible metadata and close the connection the use
