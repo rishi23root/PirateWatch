@@ -8,3 +8,6 @@ just spin a new instance and host by 2 simple commands
 1. 
 2. 
 this will also tell you if you are able to host from this server
+
+# Under dev
+open for contributions
