@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>video Player</title>
+    <style>
+        body {
+            margin: auto auto;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            padding: 1.5em;
+        }
+        video{
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <video controls loop autoplay muted>
+        <source src="/video/test.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</body>
+<script>
+    window.onload(_ => {
+
+    })
+</script>
+
+</html>
