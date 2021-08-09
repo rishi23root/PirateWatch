@@ -7,7 +7,7 @@
 class dataBank{
     constructor(){
         this.isLocalFile = true;
-        if (this.isLocalFile){
+        if (this.isLocalFile){  
             this.fileName = 'testing';
             this.
         }
