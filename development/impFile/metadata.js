@@ -33,33 +33,7 @@ function getMetadata(torrentId) {
 }
 
 // example
-getMetadata(torrentId).then(res=>console.log(res)
-)
+// getMetadata(torrentId)
+//     .then(res=>console.log(res))
 
-
-
-function parseTorrent(torrentId, onDone, onError) {
-    const client = new WebTorrent()
-
-    // Use `memory-chunk-store` to avoid creating directories inside tmp/webtorrent (https://github.com/webtorrent/webtorrent/issues/1562)
-    const torrent = client.add(torrentId, {
-        store: memoryChunkStore,
-    })
-
-    torrent.on('error', (error) => {
-        onError(error)
-
-        client.destroy()
-    })
-
-    torrent.on('metadata', () => {
-        const rootDirectory = `${torrent.name}${path.sep}`
-
-        onDone({
-            name: torrent.name,
-            files: torrent.files.map((file) => file.path.replace(rootDirectory, '')),
-        })
-
-        client.destroy()
-    })
-}
+module.exports = getMetadata;

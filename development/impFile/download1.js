@@ -1,6 +1,6 @@
 var memoryChunkStore = require('memory-chunk-store')
 var WebTorrent = require('webtorrent') 
-path: '/tmp/my-file',
+
 function parseTorrent(torrentId) {
     console.log('initialzed')
     const client = new WebTorrent()
@@ -10,7 +10,6 @@ function parseTorrent(torrentId) {
       store: memoryChunkStore,
     })
     console.log('added torrent and waiting for the response')
-
   
     torrent.on('error', (error) => {
       console.log(error)
