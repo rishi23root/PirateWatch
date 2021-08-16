@@ -9,7 +9,7 @@ class dataBank{
         this.isLocalFile = true;
         if (this.isLocalFile){  
             this.fileName = 'testing';
-            this.
+            // this.
         }
     }
 }
