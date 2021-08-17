@@ -4,7 +4,7 @@
 //u
 
 
-class dataBank{
+class DataBank{
     constructor(){
         this.isLocalFile = true;
         if (this.isLocalFile){  
@@ -13,3 +13,5 @@ class dataBank{
         }
     }
 }
+
+module.exports = DataBank;
