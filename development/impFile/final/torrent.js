@@ -16,7 +16,7 @@ class Torrent {
         this.validated = false;
         this.lastRequestTimeStamp = Date.now();
         // update 0.3 -> 3
-        this.distructorIntervalTime = 100 //3 * 60 * 1000 + 100 // 3 min + 100 (to check after 3 min)
+        this.distructorIntervalTime = distructorIntervalTime * 60 * 1000 + 100 // 3 min + 100 (to check after 3 min)
         this.torrentTimeOut = torrentTimeOut * 60 * 1000  // 0.5 min  (time out if torrent client not responded)
 
         // for torrent connection 
@@ -53,6 +53,7 @@ class Torrent {
 
                 // timeout for the torrent if torrent have issue in connecting 
                 var TorrentTimeOut = setTimeout(() => {
+                    console.log("Torrent Timeout")
                     reject("Torrent Timeout")
                 }, this.torrentTimeOut);
 
@@ -162,7 +163,7 @@ class Torrent {
 
 
 
-    // APIs to fetch data
+    // APIs to fetch metadata for this client torrent 
 
     // get indexes with this extention from the dict
     getMetadataOfExtention(reqExtention) {
@@ -190,10 +191,9 @@ class Torrent {
         return Date.now() - this.lastRequestTimeStamp
     }
 
-    // need some work here 
+    // need some work here ###################
     getStream(fileIndex, start, end) {
         // take file index and range to get the stream 
-        // after geting the stream content deselect again 
 
         // 1. check index 
         // 2. extract the content and send 
@@ -202,8 +202,7 @@ class Torrent {
 
         // request for the stream which will send in response
 
-        let f = this.torrent.files[0]
-        f.select();
+        let f = this.torrent.files[fileIndex]
         const stream = f.createReadStream({
             start,
             end
@@ -230,9 +229,11 @@ var testA = 'magnet:?xt=urn:btih:7643D0625DED0A5FC967B37A9D6AF6990236C180&dn=Ave
 // example
 // to use the streamer first time then just use the dot(.) 
 let a = Torrent.TorrentHandler(testA)
+
+
 a.then(res => {
-    // cleck if isAlive attribute if true then return error 
-    // else do whatever you want 
+    // cleck if isAlive attribute is false then return error 
+    // else do whatever you want get metadata or stream 
 
     // res.getStream(1000,100000)
     // console.log(res.fileHandlerdata);
@@ -241,7 +242,8 @@ a.then(res => {
     // console.log(
     //     res.functionDecorator(res.testing())
     // )
-    !res.isAlive ? res.error : res.testing()
+    // res.isAlive ? console.log(res.error) : 
+    res.testing()
     // console.log(res.toString());
 
 })

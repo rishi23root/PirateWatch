@@ -5,6 +5,7 @@
 
 
 class DataBank{
+    // handle the string and extraction of the data in the catch 
     constructor(){
         this.isLocalFile = true;
         if (this.isLocalFile){  
@@ -12,6 +13,10 @@ class DataBank{
             // this.
         }
     }
+
+
+    // data extractor and saver funtion in catch 
+
 }
 
 module.exports = DataBank;

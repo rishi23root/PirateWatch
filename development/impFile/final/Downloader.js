@@ -28,8 +28,8 @@ class Downloader {
 
     Initilized(){
         this.DataBank = new DataBank();
-        
     }
+
 
     testA() {
         console.log(1)
