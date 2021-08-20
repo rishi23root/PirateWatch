@@ -1,6 +1,7 @@
 // start by creating connection to the server and download the metadat
 // make default all files unselected from the selection 
 const parseURI = require('../parseURI');
+const util = require('../util');
 const webtorrent = require('webtorrent-hybrid');
 const path = require('path');
 const Downloader = require('./Downloader');
@@ -43,8 +44,7 @@ class Torrent {
         console.log("InitializeTorrent()")
         // this funtion will Initialize the request and call the Distructor function
 
-        // console.log(this.URI) // testing
-        this.fileHandlerdata = []
+        this.fileHandlerdata = [] //  'index','name','extention','size','active','downloader'
 
         return new Promise((resolve, reject) => {
 
@@ -80,18 +80,16 @@ class Torrent {
                                     'index': index,
                                     'name': file.name,
                                     'extention': path.extname(file.name).replace('.', ''),
-                                    'length': file.length,
-                                    'active': false,
-                                    'handler': new Downloader(file)
+                                    'size': file.length,
+                                    'downloader': new Downloader(file)
                                 });
                             } catch {
                                 this.fileHandlerdata.push({
                                     'index': index,
                                     'name': file.name,
                                     'extention': path.extname(file.name),
-                                    'length': file.length,
-                                    'active': false,
-                                    'handler': new Downloader(file)
+                                    'size': file.length,
+                                    'downloader': new Downloader(file)
                                 });
                             }
 
@@ -182,7 +180,7 @@ class Torrent {
         // to return the metadata for the file to show 
 
         return this.fileHandlerdata.map(ele => {
-            return ({ index: ele.index, name: ele.name, extention: ele.extention, length: ele.length });
+            return ({ index: ele.index, name: ele.name, extention: ele.extention, size: ele.size });
         })
     }
 
@@ -193,22 +191,32 @@ class Torrent {
 
     // need some work here ###################
     getStream(fileIndex, start, end) {
-        // take file index and range to get the stream 
+        console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
 
-        // 1. check index 
+        // 1. check index in range and return its downloaded data
+        if (this.fileHandlerdata.length && this.fileHandlerdata.length > fileIndex) {
+            // check if we even have files and index in the range 
+
+            // metadata and downloader
+            const torrentFile = this.fileHandlerdata[fileIndex]
+
+            // downloader instance
+            return torrentFile.downloader.get({
+                start,
+                end,
+            })
+        } else {
+            // return null values
+            return {
+                header: '',
+                stream: ''
+            }
+        }
         // 2. extract the content and send 
         // 3. extract next byte sources
 
 
         // request for the stream which will send in response
-
-        let f = this.torrent.files[fileIndex]
-        const stream = f.createReadStream({
-            start,
-            end
-        });
-        console.log("geting stream ")
-        return stream
     }
 
 
@@ -231,7 +239,7 @@ var testA = 'magnet:?xt=urn:btih:7643D0625DED0A5FC967B37A9D6AF6990236C180&dn=Ave
 let a = Torrent.TorrentHandler(testA)
 
 
-a.then(res => {
+a.then(async res => {
     // cleck if isAlive attribute is false then return error 
     // else do whatever you want get metadata or stream 
 
@@ -243,8 +251,11 @@ a.then(res => {
     //     res.functionDecorator(res.testing())
     // )
     // res.isAlive ? console.log(res.error) : 
-    res.testing()
-    // console.log(res.toString());
+    // res.testing()
+    for (let index = 0; index < 2; index++) {
+        const data = await res.getStream(0, index*1024, (index+1)*1024)
+        console.log(data['header']);
+    }
 
 })
 // a.then(res => console.log(res));
