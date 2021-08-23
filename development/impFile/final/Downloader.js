@@ -4,26 +4,22 @@ const ContentTypes = require("./types");
 const util = require('../util');
 const path = require('path');
 
-
-// workon 
-// 1. fetching
-// 2. update var for get streaming
-// 3. class to extract and pass data to the api
-
 const notStreamingFileSize = 1024 ** 2
 
 class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
     // responsible for only one file 
-    constructor(file, timeoutInMinutes = 5) {
+    constructor(file, timeoutInMinutes = 5, useCacheMemory = true) {
         console.log(`Downloader Constructor(object of file =${file.name})`);
 
         super(timeoutInMinutes)
+        this.useCacheMemory = useCacheMemory
         this.isDownloaderInitilized = false // to save most of the memory
         this.dataChunkSize = 2 * 1024 // 2 mb
         this.torrentFile = file;
+
         try {
-            this.extention = path.extname(file.name).replace('.','').toUpperCase();
+            this.extention = path.extname(file.name).replace('.', '').toUpperCase();
         } catch {
             this.extention = path.extname(file.name).toUpperCase();
         }
@@ -38,8 +34,21 @@ class Downloader extends DataBank {
     Initilize() {
         console.log(`Downloader Initilize()`);
 
-        this.initilizeCache()
-        this.isDownloaderInitilized = true;
+        // initize if using cache
+        if (this.useCacheMemory) {
+            this.initilizeCache()
+            this.isDownloaderInitilized = true;
+        }
+    }
+
+    Close() {
+        console.log(`Downloader Close()`);
+
+        // close the cache 
+        if (this.useCacheMemory) {
+            this.CloseCache()
+        }
+
     }
 
     setHeader(range) {
@@ -49,82 +58,134 @@ class Downloader extends DataBank {
         this.header["Content-Length"] = range.end - range.start + 1
     }
 
+    checkRange(range) {
+        console.log(`Downloader checkRange({start:${range.start},end:${range.end}})`);
+        // check the range request in range and return new range and isUpdated 
+
+        var isUpdated = false;
+        if (range.start > range.end || range.end == 0) {
+
+            // if data is inverse and end is null just send next dataChunkSize bytes 
+            var newEndRange = range.start + this.dataChunkSize
+            isUpdated = true;
+
+        } else if (range.end > this.torrentFile.length) {
+
+            // if end is greater then file length
+            var newEndRange = Math.min(
+                range.start + this.dataChunkSize,
+                this.torrentFile.length - 1
+            );
+            isUpdated = true;
+
+        }
+
+        // if there is any change in value 
+        if (isUpdated) {
+            // updated
+            range.end = newEndRange
+            return new Array(range, true)
+        } else {
+
+            // not updated 
+            return new Array(range, false)
+        }
+    }
+
     get(range) {
         console.log(`Downloader get(range=${range})`);
 
         // range of data obj of start and end 
-
         const response = {}
+
         if (!this.isDownloaderInitilized) {
 
-            if (util.isNumberAroundBy(this.torrentFile.length, notStreamingFileSize)) {
+            if (util.isNumberAroundBy(
+                this.torrentFile.length,
+                notStreamingFileSize
+            )) {
+
                 response['header'] = this.header
                 response['stream'] = this.torrentFile.createReadStream(); // return the whole file
                 return response
+
             }
             else
                 this.Initilize()
         }
 
+        // check and update end-range 
+        range = this.checkRange(range)[0]
+        // console.log(range);
 
-        range = this.checkRange(range)
         // update headers
         this.setHeader(range)
-
         response['header'] = this.header
 
-        
-        // response['stream'] = this.torrentFile.createReadStream(); // return the whole file
+        this.useCacheMemory && console.log("stored data", this.getKeyValue(range.start))
+        if (this.useCacheMemory && this.getKeyValue(range.start)) {
+            // update the response with the stream data
+            response['stream'] = this.getKeyValue(range.start, true);
 
-        // 1. check the database if it have this range.start key then 
-        //     1.1. just return the results in return
-        //     1.2. else if not in database then make a request and get the content and return it then 
-        // 2. make the next request to go forword
-        
+            // call the function to get and save more data in the database
+            this.useCacheMemory && this.downloadAndSaveNext(range);
 
-        console.log("stored data", this.getKeyValue(range.start))
-        const stream = this.torrentFile.createReadStream(range);
+            return response
+        }
+        else {
+            // request to get the stream and update the response 
+            response['stream'] = this.downloadAndGet(range, false);
 
-        this.saveKeyValue(range.start, stream)
-        // fire functions  to save the data in the database
+            // call the function to get and save more data in the database
+            this.useCacheMemory && this.downloadAndSaveNext(range);
 
-        setTimeout(() => {
-            console.log(this.getStats());
-        }, 5000);
+            return response
+        }
 
-
-        // request more in back
-        return response
     }
 
-    checkRange(range) {
-        // check the range request in range
-        range.end = Math.min(
-            range.start + this.dataChunkSize,
-            this.torrentFile.length - 1
-        );
-        return range
+    downloadAndGet(range, toSave = false) {
+        console.log(`Downloader downloadAndGet(range :{start:${range.start},end:${range.end}}, toSave:${toSave})`);
+
+        // download the stream in and return or save in the database
+
+        if (toSave && this.useCacheMemory) {
+
+            // save the stream in the database 
+            this.saveKeyValue(
+                range.start, // key 
+                this.torrentFile.createReadStream(range)
+            )
+            return 1; // saved
+
+        } else {
+
+            // just return the stream of the range needed (don't save in database)
+            return this.torrentFile.createReadStream(range); // not saved just returned
+        }
+
+    }
+
+    downloadAndSaveNext(range) {
+        console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
+        // save the data for next range 
+        // next the x requests and save the requests 
+
+        // 0. get all the ranges to save 
+        // if anyone of ele list fails then just drop rest elemetns 
+        // 1. check if next range in range
+        // 2. check if next range alredy saved 
+        // 3. 
+        this.downloadAndGet(xrange,toSave=true)
     }
 
     // workon - 
 
-    // funtion to extract the local 
-
-    // get the stream stored 
-
     // get ratio of stored content 
-
-    // fetch the new stream and return instantaniously 
-
-    // extract the requested stream from database 
-
-    // clear the databank database
 
     // fetch next request streams
 
     // check for store for storage if less fill it again 
-
-    // save the data in the stream
 
 }
 
