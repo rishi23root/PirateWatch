@@ -239,7 +239,7 @@ var testA = 'magnet:?xt=urn:btih:7643D0625DED0A5FC967B37A9D6AF6990236C180&dn=Ave
 let a = Torrent.TorrentHandler(testA)
 
 
-a.then(async  handler => {
+a.then(handler => {
     // cleck if isAlive attribute is false then return error 
     // else do whatever you want get metadata or stream 
 
@@ -253,7 +253,7 @@ a.then(async  handler => {
     //  handler.isAlive ? console.log( handler.error) : 
     //  handler.testing()
     for (let index = 0; index < 2; index++) {
-        const data = await  handler.getStream(0, index*1024, (index+1)*1024)
+        const data = handler.getStream(0, (index + 1) * 1024, (index + 2) * 1024)
         console.log(data['header']);
     }
 

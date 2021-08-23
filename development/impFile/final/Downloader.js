@@ -6,17 +6,21 @@ const path = require('path');
 
 const notStreamingFileSize = 1024 ** 2
 
+// responsible for only one file 
+
 class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
-    // responsible for only one file 
     constructor(file, timeoutInMinutes = 5, useCacheMemory = true) {
         console.log(`Downloader Constructor(object of file =${file.name})`);
 
         super(timeoutInMinutes)
-        this.useCacheMemory = useCacheMemory
-        this.isDownloaderInitilized = false // to save most of the memory
-        this.dataChunkSize = 2 * 1024 // 2 mb
         this.torrentFile = file;
+        this.isDownloaderInitilized = false // to save most of the memory
+
+        // args to accepts
+        this.dataChunkSize = 2 * 1024 // 2 mb
+        this.cacheRequestCount = 5; // no. of requests which will soted after a request made in the database
+        this.useCacheMemory = useCacheMemory
 
         try {
             this.extention = path.extname(file.name).replace('.', '').toUpperCase();
@@ -148,7 +152,6 @@ class Downloader extends DataBank {
         console.log(`Downloader downloadAndGet(range :{start:${range.start},end:${range.end}}, toSave:${toSave})`);
 
         // download the stream in and return or save in the database
-
         if (toSave && this.useCacheMemory) {
 
             // save the stream in the database 
@@ -168,15 +171,37 @@ class Downloader extends DataBank {
 
     downloadAndSaveNext(range) {
         console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
-        // save the data for next range 
-        // next the x requests and save the requests 
+
+        // to download and save the response in cache
+        // ################ working here ###################################
+        // 1. optimise it 
+        // 2.make it almost instantanious 
+        // make the next request instant and rep other in thread
+
+        check before downloding the next requests 
+
+
+        const reqRanges = new Array();
+        var laststart = range.start;
+        var lastend = range.end;
+        for (let index = 0; index < this.cacheRequestCount; index++) {
+            let range = {
+                start: laststart + this.dataChunkSize,
+                end: lastend + this.dataChunkSize,
+            }
+            laststart = range.start
+            lastend = range.end
+            reqRanges.push(range)            
+        }
+        // this.downloadAndGet(range, true)
+        // this.cacheRequestCount
 
         // 0. get all the ranges to save 
         // if anyone of ele list fails then just drop rest elemetns 
         // 1. check if next range in range
         // 2. check if next range alredy saved 
         // 3. 
-        this.downloadAndGet(xrange,toSave=true)
+        // this.downloadAndGet(xrange,toSave=true)
     }
 
     // workon - 

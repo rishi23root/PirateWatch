@@ -1,12 +1,14 @@
-// to handle the data extraction from the file on
-// without make reading and writting process slow in local FILES
+// to handle the data extraction from the file without make reading and writting process slow in local FILES
+
 const NodeCache = require("node-cache");
 
-cacheObj = {
+const cacheObj = {
     ttl: 0, // default expire time 
     useClones: false, // to use reference rather then object copies 
     deleteOnExpire: true, // to save the memory
 }
+
+// update the ttl for timeOut 
 
 class DataBank {
     // handle the string and extraction of the data in the cache 
