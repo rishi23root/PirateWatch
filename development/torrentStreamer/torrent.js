@@ -1,7 +1,6 @@
 // start by creating connection to the server and download the metadat
 // make default all files unselected from the selection 
-const parseURI = require('../parseURI');
-const util = require('../util');
+const parseURI = require('./parseURI');
 const webtorrent = require('webtorrent-hybrid');
 const path = require('path');
 const Downloader = require('./Downloader');
@@ -187,7 +186,6 @@ class Torrent {
     }
 
     getLatestRequestTimeDifference() {
-
         return Date.now() - this.lastRequestTimeStamp
     }
 
@@ -195,6 +193,9 @@ class Torrent {
     getStream(fileIndex, start, end) {
         console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
         // return {header,stream}
+
+        // update new request take place
+        this.lastRequestTimeStamp = Date.now();
 
         // 1. check index in range and return its downloaded data
         if (this.fileHandlerdata.length && this.fileHandlerdata.length > fileIndex) {
