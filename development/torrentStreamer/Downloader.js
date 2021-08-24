@@ -4,7 +4,7 @@ const ContentTypes = require("./types");
 const util = require('./util');
 const path = require('path');
 
-const notStreamingFileSize = 1024 ** 2
+const notStreamingFileSize = 2*(1024 ** 2) // 2mb
 
 // responsible for only one file 
 
@@ -112,7 +112,7 @@ class Downloader extends DataBank {
 
             if (util.isNumberAroundBy(
                 this.torrentFile.length,
-                notStreamingFileSize
+                notStreamingFileSize,0.5
             )) {
 
                 response['header'] = this.header
@@ -205,7 +205,6 @@ class Downloader extends DataBank {
 }
 
 module.exports = Downloader;
-
 
 // testing
 // const a = new Downloader("DataBank.js");

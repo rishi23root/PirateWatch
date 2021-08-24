@@ -4,6 +4,16 @@ const app = require('express')();
 const store = {};
 
 
+// updates need here
+// 1. make this api and also make calls for files direction json data represent 
+// make a function in downloader to get the images for the previews 
+// 2. make it specific and automated for show images
+// 3. secure the inputs and output
+
+
+
+
+
 // html page
 app.get('/', (req, res) => {
     res.status(200)
@@ -28,10 +38,10 @@ app.get('/video/:videoName', async (req, res, next) => {
     }
 
     store[videoName]
-        .then(handler =>{
+        .then(handler => {
 
             console.log("Torrent is already define0..");
-            const results = handler.getStream(0, rangeStart , 0)
+            const results = handler.getStream(0, rangeStart, 0)
             res.writeHead(206, results['header']);
             results['stream'].pipe(res);
         })

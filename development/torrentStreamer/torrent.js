@@ -7,17 +7,27 @@ const Downloader = require('./Downloader');
 const memoryChunkStore = require('memory-chunk-store')
 
 
+// make a function in downloader to get the images for the previews 
+
 class Torrent {
     // take URI -> magnet or infoHASH  
     // torrentTimeOut -> (in minutes)torrent TimeOut 🤣
     // distructorIntervalTime -> (in minutes) to dismental the class if next request not came in 
-    constructor(URI, torrentTimeOut = 0.5, distructorIntervalTime = 3) {
+    constructor(URI,
+        torrentTimeOut = 0.5,
+        distructorIntervalTime = 3,
+        dataChunkSizeInmb = 0.75,
+        cacheRequestCount = 15,
+        cacheTimeoutInMinutes = 0.5
+    ) {
         this.URI = URI;
         this.validated = false;
         this.lastRequestTimeStamp = Date.now();
-        // update 0.3 -> 3
         this.distructorIntervalTime = distructorIntervalTime * 60 * 1000 + 100 // 3 min + 100 (to check after 3 min)
         this.torrentTimeOut = torrentTimeOut * 60 * 1000  // 0.5 min  (time out if torrent client not responded)
+        this.dataChunkSizeInmb = dataChunkSizeInmb
+        this.cacheRequestCount = cacheRequestCount
+        this.cacheTimeoutInMinutes = cacheTimeoutInMinutes
 
         // for torrent connection 
         this.client = null;
@@ -78,17 +88,25 @@ class Torrent {
                                 this.fileHandlerdata.push({
                                     'index': index,
                                     'name': file.name,
+                                    'path': file.path,
                                     'extention': path.extname(file.name).replace('.', ''),
                                     'size': file.length,
-                                    'downloader': new Downloader(file)
+                                    'downloader': new Downloader(file,
+                                        this.dataChunkSizeInmb,
+                                        this.cacheRequestCount,
+                                        this.cacheTimeoutInMinutes)
                                 });
                             } catch {
                                 this.fileHandlerdata.push({
                                     'index': index,
                                     'name': file.name,
+                                    'path': file.path,
                                     'extention': path.extname(file.name),
                                     'size': file.length,
-                                    'downloader': new Downloader(file)
+                                    'downloader': new Downloader(file,
+                                        this.dataChunkSizeInmb,
+                                        this.cacheRequestCount,
+                                        this.cacheTimeoutInMinutes)
                                 });
                             }
 
