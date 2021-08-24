@@ -65,6 +65,7 @@ class Downloader extends DataBank {
     checkRange(range) {
         console.log(`Downloader checkRange({start:${range.start},end:${range.end}})`);
         // check the range request in range and return new range and isUpdated 
+        // returns a array updated range and isUpdated boo
 
         var isUpdated = false;
         if (range.start > range.end || range.end == 0) {
@@ -120,11 +121,10 @@ class Downloader extends DataBank {
 
         // check and update end-range 
         range = this.checkRange(range)[0]
-        // console.log(range);
 
         // update headers
         this.setHeader(range)
-        response['header'] = this.header
+        response['header'] = this.header    
 
         this.useCacheMemory && console.log("stored data", this.getKeyValue(range.start))
         if (this.useCacheMemory && this.getKeyValue(range.start)) {
@@ -132,7 +132,10 @@ class Downloader extends DataBank {
             response['stream'] = this.getKeyValue(range.start, true);
 
             // call the function to get and save more data in the database
-            this.useCacheMemory && this.downloadAndSaveNext(range);
+            // for thread like action using serTimeout funtion call
+            setTimeout(() => {
+                this.useCacheMemory && this.downloadAndSaveNext(range);
+            }, 0.001);
 
             return response
         }
@@ -141,7 +144,10 @@ class Downloader extends DataBank {
             response['stream'] = this.downloadAndGet(range, false);
 
             // call the function to get and save more data in the database
-            this.useCacheMemory && this.downloadAndSaveNext(range);
+            // for thread like action using serTimeout funtion call
+            setTimeout(() => {
+                this.useCacheMemory && this.downloadAndSaveNext(range);
+            }, 0.001);
 
             return response
         }
@@ -172,45 +178,24 @@ class Downloader extends DataBank {
     downloadAndSaveNext(range) {
         console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
 
-        // to download and save the response in cache
-        // ################ working here ###################################
-        // 1. optimise it 
-        // 2.make it almost instantanious 
         // make the next request instant and rep other in thread
+        var newRange = {};
+        for (let index = 1; index < this.cacheRequestCount + 1; index += 1) {
+            // create new range
+            newRange['start'] = range.start + (this.dataChunkSize * index)
+            newRange['end'] = newRange['start'] + this.dataChunkSize
 
-        check before downloding the next requests 
-
-
-        const reqRanges = new Array();
-        var laststart = range.start;
-        var lastend = range.end;
-        for (let index = 0; index < this.cacheRequestCount; index++) {
-            let range = {
-                start: laststart + this.dataChunkSize,
-                end: lastend + this.dataChunkSize,
+            // validate the key
+            if (!this.validateKey(newRange.start)) {
+                // check range 
+                newRange = this.checkRange(newRange)[0]
+                this.downloadAndGet(newRange, true)
+            } else {
+                console.log(newRange);
             }
-            laststart = range.start
-            lastend = range.end
-            reqRanges.push(range)            
+
         }
-        // this.downloadAndGet(range, true)
-        // this.cacheRequestCount
-
-        // 0. get all the ranges to save 
-        // if anyone of ele list fails then just drop rest elemetns 
-        // 1. check if next range in range
-        // 2. check if next range alredy saved 
-        // 3. 
-        // this.downloadAndGet(xrange,toSave=true)
     }
-
-    // workon - 
-
-    // get ratio of stored content 
-
-    // fetch next request streams
-
-    // check for store for storage if less fill it again 
 
 }
 

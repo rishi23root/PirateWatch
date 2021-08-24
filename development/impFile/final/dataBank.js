@@ -76,9 +76,10 @@ class DataBank {
     CloseCache(){
         console.log(`dataBank CloseCache()`);
         // clear data and timeouts 
-
-        this.myStreamCache.flushAll()
-        this.myStreamCache.close()
+        if (this.myStreamCache){
+            this.myStreamCache.flushAll()
+            this.myStreamCache.close()
+        }
     }
 
     // del a key

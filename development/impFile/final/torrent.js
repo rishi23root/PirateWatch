@@ -152,13 +152,15 @@ class Torrent {
         // this will close the connection and close all class function calls 
         this.isAlive = false;
 
+        // distroy the databank
+        this.fileHandlerdata.map(ele => ele.downloader.Close());
+
         // close the torrent and distroy the timeout 
         if (this.client) {
             this.client.destroy()
         }
         clearInterval(this.invervalDistructor)
     }
-
 
 
     // APIs to fetch metadata for this client torrent 
@@ -192,6 +194,7 @@ class Torrent {
     // need some work here ###################
     getStream(fileIndex, start, end) {
         console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
+        // return {header,stream}
 
         // 1. check index in range and return its downloaded data
         if (this.fileHandlerdata.length && this.fileHandlerdata.length > fileIndex) {
@@ -212,20 +215,13 @@ class Torrent {
                 stream: ''
             }
         }
-        // 2. extract the content and send 
-        // 3. extract next byte sources
-
-
-        // request for the stream which will send in response
     }
-
 
     // just for the testing 
     testing() {
         console.log("testing()");
         console.log(this.getMetadata())
-        // console.log(this.fileHandlerdata[0].handler);
-        // this.fileHandlerdata[0].handler.testA()
+        console.log(this.getMetadataOfExtention('mp4'));
     }
 
 }
@@ -240,6 +236,8 @@ let a = Torrent.TorrentHandler(testA)
 
 
 a.then(handler => {
+    handler.testing()
+    handler.close()
     // cleck if isAlive attribute is false then return error 
     // else do whatever you want get metadata or stream 
 
@@ -252,10 +250,14 @@ a.then(handler => {
     // )
     //  handler.isAlive ? console.log( handler.error) : 
     //  handler.testing()
-    for (let index = 0; index < 2; index++) {
-        const data = handler.getStream(0, (index + 1) * 1024, (index + 2) * 1024)
-        console.log(data['header']);
-    }
+
+    // testing of the stream obj
+    // for (let index = 0; index < 2; index++) {
+    //     setTimeout(() => {
+    //         const data = handler.getStream(0, (index) * 1024 * 2, (index + 1) * 1024 * 2)
+    //         console.log(data['header']);
+    //     }, 1000*index);
+    // }
 
 })
 // a.then(res => console.log(res));
