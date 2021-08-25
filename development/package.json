@@ -4,8 +4,8 @@
   "description": "prirete watch will be a site\r which can download the movie and stream them from torent sites",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon .\\torrentStreamer\\index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start-dev": "nodemon .\\torrentStreamer\\index.js",
+    "start": "node .\\torrentStreamer\\index.js"
   },
   "keywords": [],
   "author": "",

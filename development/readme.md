@@ -1,51 +1,3 @@
-for each file we need to have the databank which will handle the size and next bite range and extraction of next response
-
-then we have torrent class which will use the databank class to adn pass the torrent object in it so that it will call for next stream before call of the user 
-
-
-databank    -----\
-downloader     ----==> combine them to make fast and instant video data provider but also keep memory in mind 
-torrent     -----/
-
-
-
-for download the vidoe content from the server
-server will request to the torrent server with the bytes ranges
-and pipe the resonse
-
-for the constense request and count of content
-make a class which will handle the extraction of metadata
-and loading of the requested content
-
-a function which will terminate the class call if not called for 3 mins
-
-const torrent = client.add(torrentId, {
-
-    store: memoryChunkStore,
-
-})
-
-for linux
-first intall - npm i node-pre-gyp
-
-### file which handle data extraction
-
-1. get the metadata of the files
-2. get all the video files - give list of files to use later on if more then 1
-3. keep the request client open till next request
-4. close the client if not any request for some time
-
-create different event and send the with prefix of the event to
-https://github.com/webtorrent/webtorrent-desktop/blob/fec063bd1df30ffe4791b513ee23ae3cd558a72a/src/renderer/webtorrent.js#L241
-
-for the video representation start form opening a new port to watch
-
-lib => torent hash
-webtorent
-react
-
---save-dev
-
 to download videos in webtorrent node - https://www.youtube.com/watch?v=CekCtDgacfw
 
 this whole project is my whole idea
@@ -111,7 +63,8 @@ how :
 ### froentEND
 
 create 2 pages
-
+0. for extraction of data api with right names and all use - https://api.tvmaze.com/search/shows?q=avengers this will perfect 
+drived from - https://public-apis.io/free-movies-apis-collection
 1. home which will ask for movie name or torrent link 0. 'from the name' show the movie name from the google and extract the torent link for the movie form api
    1. 'from the link' download the movie straight away
 2. second page will show the movie in the tab 0. video player - this will play videos on the

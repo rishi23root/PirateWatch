@@ -39,18 +39,18 @@ class Torrent {
 
     // class creators 
     async validateAndGetHashInfo() {
-        console.log("validateAndGetHashInfo()")
+        // testing console.log("validateAndGetHashInfo()")
         // initialize by geting the info of hash or URI 
 
         this.URIinfo = await parseURI(this.URI);
         if (this.URIinfo['type'] == 'URI' || this.URIinfo['type'] == 'infoHash') {
             this.validated = true;
         }
-        // console.log(this.validated) // for testing 
+        // // testing console.log(this.validated) // for testing 
     }
 
     async InitializeTorrent() {
-        console.log("InitializeTorrent()")
+        // testing console.log("InitializeTorrent()")
         // this funtion will Initialize the request and call the Distructor function
 
         this.fileHandlerdata = [] //  'index','name','extention','size','active','downloader'
@@ -62,7 +62,7 @@ class Torrent {
 
                 // timeout for the torrent if torrent have issue in connecting 
                 var TorrentTimeOut = setTimeout(() => {
-                    console.log("Torrent Timeout")
+                    // testing console.log("Torrent Timeout")
                     reject("Torrent Timeout")
                 }, this.torrentTimeOut);
 
@@ -113,7 +113,7 @@ class Torrent {
                         });
                         this.torrent.deselect(0, this.torrent.pieces.length - 1, false);
 
-                        // console.log(1,this.fileHandlerdata); //testing 
+                        // // testing console.log(1,this.fileHandlerdata); //testing 
 
                         // inilize the Distructor for saving server resourses  
                         this.TorrentDistructor();
@@ -126,8 +126,8 @@ class Torrent {
     }
 
     async TorrentDistructor() {
-        console.log("TorrentDistructor()")
-        // console.log(this.getLatestRequestTimeDifference(), this.distructorIntervalTime) // testing
+        // testing console.log("TorrentDistructor()")
+        // // testing console.log(this.getLatestRequestTimeDifference(), this.distructorIntervalTime) // testing
 
         // this funtion is called in the InitializeTorrent after get the torrent data 
 
@@ -165,7 +165,7 @@ class Torrent {
     }
 
     close() {
-        console.log("close()");
+        // testing console.log("close()");
         // this will close the connection and close all class function calls 
         this.isAlive = false;
 
@@ -184,7 +184,7 @@ class Torrent {
 
     // get indexes with this extention from the dict
     getMetadataOfExtention(reqExtention) {
-        console.log("getMetadataOfExtention()");
+        // testing console.log("getMetadataOfExtention()");
         // to return the metadata for the specific files to show 
 
         return this.fileHandlerdata.filter(ele => {
@@ -195,7 +195,7 @@ class Torrent {
 
     // metadata for the files from dict
     getMetadata() {
-        console.log("getMetadata()");
+        // testing console.log("getMetadata()");
         // to return the metadata for the file to show 
 
         return this.fileHandlerdata.map(ele => {
@@ -209,7 +209,7 @@ class Torrent {
 
     // need some work here ###################
     getStream(fileIndex, start, end) {
-        console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
+        // testing console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
         // return {header,stream}
 
         // update new request take place
@@ -238,9 +238,9 @@ class Torrent {
 
     // just for the testing 
     testing() {
-        console.log("testing()");
-        console.log(this.getMetadata())
-        console.log(this.getMetadataOfExtention('mp4'));
+        // testing console.log("testing()");
+        // testing console.log(this.getMetadata())
+        // testing console.log(this.getMetadataOfExtention('mp4'));
     }
 
 }
@@ -262,25 +262,25 @@ module.exports = Torrent;
 //     // else do whatever you want get metadata or stream 
 
 //     //  handler.getStream(1000,100000)
-//     // console.log( handler.fileHandlerdata);
+//     // // testing console.log( handler.fileHandlerdata);
 //     //  handler.testing();
-//     // console.log( handler.getMetadataOfExtention('jpg'))
-//     // console.log(
+//     // // testing console.log( handler.getMetadataOfExtention('jpg'))
+//     // // testing console.log(
 //     //      handler.functionDecorator( handler.testing())
 //     // )
-//     //  handler.isAlive ? console.log( handler.error) : 
+//     //  handler.isAlive ? // testing console.log( handler.error) : 
 //     //  handler.testing()
 
 //     // testing of the stream obj
 //     // for (let index = 0; index < 2; index++) {
 //     //     setTimeout(() => {
 //     //         const data = handler.getStream(0, (index) * 1024 * 2, (index + 1) * 1024 * 2)
-//     //         console.log(data['header']);
+//     //         // testing console.log(data['header']);
 //     //     }, 1000*index);
 //     // }
 
 // })
-// a.then(res => console.log(res));
+// a.then(res => // testing console.log(res));
 // a.then(res => res.getStream(1000, 10000));
 
 // let a = Torrent.TorrentHandler(testA)

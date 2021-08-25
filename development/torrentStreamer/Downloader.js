@@ -16,7 +16,7 @@ class Downloader extends DataBank {
                 cacheTimeoutInMinutes = 2, 
                 useCacheMemory = true
                 ) {
-        console.log(`Downloader Constructor(object of file =${file.name})`);
+        // testing console.log(`Downloader Constructor(object of file =${file.name})`);
 
         super(cacheTimeoutInMinutes)
         this.torrentFile = file;
@@ -41,7 +41,7 @@ class Downloader extends DataBank {
     }
 
     Initilize() {
-        console.log(`Downloader Initilize()`);
+        // testing console.log(`Downloader Initilize()`);
 
         // initize if using cache
         if (this.useCacheMemory) {
@@ -51,7 +51,7 @@ class Downloader extends DataBank {
     }
 
     Close() {
-        console.log(`Downloader Close()`);
+        // testing console.log(`Downloader Close()`);
 
         // close the cache 
         if (this.useCacheMemory) {
@@ -68,7 +68,7 @@ class Downloader extends DataBank {
     }
 
     checkRange(range) {
-        console.log(`Downloader checkRange({start:${range.start},end:${range.end}})`);
+        // testing console.log(`Downloader checkRange({start:${range.start},end:${range.end}})`);
         // check the range request in range and return new range and isUpdated 
         // returns a array updated range and isUpdated boo
 
@@ -103,7 +103,7 @@ class Downloader extends DataBank {
     }
 
     get(range) {
-        console.log(`Downloader get(range=${range})`);
+        // testing console.log(`Downloader get(range=${range})`);
 
         // range of data obj of start and end 
         const response = {}
@@ -131,7 +131,7 @@ class Downloader extends DataBank {
         this.setHeader(range)
         response['header'] = this.header    
 
-        this.useCacheMemory && console.log("stored data", this.getKeyValue(range.start))
+        // this.useCacheMemory && // testing console.log("stored data", this.getKeyValue(range.start))
         if (this.useCacheMemory && this.getKeyValue(range.start)) {
             // update the response with the stream data
             response['stream'] = this.getKeyValue(range.start, true);
@@ -160,7 +160,7 @@ class Downloader extends DataBank {
     }
 
     downloadAndGet(range, toSave = false) {
-        console.log(`Downloader downloadAndGet(range :{start:${range.start},end:${range.end}}, toSave:${toSave})`);
+        // testing console.log(`Downloader downloadAndGet(range :{start:${range.start},end:${range.end}}, toSave:${toSave})`);
 
         // download the stream in and return or save in the database
         if (toSave && this.useCacheMemory) {
@@ -181,7 +181,7 @@ class Downloader extends DataBank {
     }
 
     downloadAndSaveNext(range) {
-        console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
+        // testing console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
 
         // make the next request instant and rep other in thread
         var newRange = {};
@@ -196,7 +196,7 @@ class Downloader extends DataBank {
                 newRange = this.checkRange(newRange)[0]
                 this.downloadAndGet(newRange, true)
             } else {
-                console.log(newRange);
+                // testing console.log(newRange);
             }
 
         }

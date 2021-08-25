@@ -10,26 +10,51 @@
         body {
             margin: auto auto;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-content: center;
             padding: 1.5em;
         }
-        video{
-            transform: scale(1.1);
+
+        .info,
+        .video {
+            text-align: center;
+            font-size: 3em;
+        }
+
+        .container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 50%;
+            height: 50%;
+            overflow: hidden;
+        }
+
+        video {
+            width: 95%    !important;
+            height: auto   !important;
+            margin: 0.5em;
+            padding: auto;
         }
     </style>
 </head>
 
 <body>
-    <video controls loop autoplay muted>
-        <source src="/video/test.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <div class="info">
+        Just put the magnet link in the url like /{magnet}
+    </div>
+    <div class="video cointainer">
+        <video controls loop autoplay muted>
+            <source id="source" src="/video/" +(location.pathname+location.search).substr(1) type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
 </body>
-<script>
-    window.onload(_ => {
-
-    })
+<script defer>
+    let magnet = (location.pathname + location.search).substr(1)
+    console.log(magnet);
+    document.getElementById("source").src = "/video/" + magnet
 </script>
 
 </html>

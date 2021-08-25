@@ -4,43 +4,35 @@ const app = require('express')();
 const store = {};
 
 
-// updates need here
-// 1. make this api and also make calls for files direction json data represent 
-// make a function in downloader to get the images for the previews 
-// 2. make it specific and automated for show images
-// 3. secure the inputs and output
-
-
-
-
-
-// html page
-app.get('/', (req, res) => {
-    res.status(200)
-    res.sendFile(__dirname + "/video.html");
+app.get('/',(req,res)=>{
+    var testA = 'magnet:?xt=urn:btih:7643D0625DED0A5FC967B37A9D6AF6990236C180&dn=Avengers+Infinity+War+2018+English+1080p&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce'
+    res.redirect("/"+testA)
 })
 
+app.get('/:magnetURI', (req, res) => {
+    res.status(200)
+    const magnet = req.params.magnetURI
+    res.sendFile(__dirname + "/video.html",{magnet:magnet});
+})
 
 // streaming 
 app.get('/video/:videoName', async (req, res, next) => {
+    // args - file index and  validation strings 
     // Ensure there is a range given for the video
-    console.log(req.url);
     const videoName = req.params.videoName
     const rangeStart = Number((req.headers.range).replace(/\D/g, ""));
 
     var testA = 'magnet:?xt=urn:btih:7643D0625DED0A5FC967B37A9D6AF6990236C180&dn=Avengers+Infinity+War+2018+English+1080p&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce'
 
-
     if (store[videoName] == undefined) {
         store[videoName] = torrent.TorrentHandler(testA)
-    } else {
-        console.log("Torrent is already define");
+    // } else {
+    //     console.log("Torrent is already define");
     }
 
     store[videoName]
         .then(handler => {
-
-            console.log("Torrent is already define0..");
+            // console.log("Torrent is already define0..");
             const results = handler.getStream(0, rangeStart, 0)
             res.writeHead(206, results['header']);
             results['stream'].pipe(res);
@@ -53,7 +45,12 @@ app.get('/video/:videoName', async (req, res, next) => {
         .send("Requires Range header and valid video name ");
 })
 
-
 app.listen(80, _ => {
     console.log("Listening on 80 open http://127.0.0.1:80/");
 });
+
+
+// short express 
+// require('express')()
+// 	.get("\index",(req,res)=>res.send("testing here"))
+// 	.listen(80, _ => console.log("Listening on 80 open http://127.0.0.1:80/"))

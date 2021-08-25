@@ -11,3 +11,10 @@ this will also tell you if you are able to host from this server
 
 # Under dev
 open for contributions
+
+
+# posible updates (create a new issue)
+make the first paint of the vidio to be smooth 
+    take a look on that 
+download a frame to show the points in the vidoes when hover on the 
+update for threading in Downloader to be more faster
