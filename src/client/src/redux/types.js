@@ -1,0 +1,1 @@
+export const UPDATE_MAGNET = "UPDATE_MAGNET";
