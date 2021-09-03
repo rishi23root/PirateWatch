@@ -8,6 +8,10 @@ const notStreamingFileSize = 2 * (1024 ** 2) // 2mb
 
 // responsible for only one file 
 
+
+// try to update it for concurouncy and in the threading 
+setImmediate
+
 class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
     constructor(file,
@@ -74,10 +78,12 @@ class Downloader extends DataBank {
         console.log(range);
 
         var isUpdated = false;
+        var newStartRange = range.start;
+        var newEndRange = range.end;
         if (range.start > range.end || range.end == 0) {
 
             // if data is inverse and end is null just send next dataChunkSize bytes 
-            var newEndRange = range.start + this.dataChunkSize
+            newEndRange = range.start + this.dataChunkSize
             isUpdated = true;
 
         } else if (range.end > this.torrentFile.length) {
@@ -91,82 +97,16 @@ class Downloader extends DataBank {
 
         }
 
-        // if there is any change in value 
-        if (isUpdated) {
-            // updated
-            range.end = newEndRange
-            return new Array(range, true)
-        } else {
-            // not updated 
-            return new Array(range, false)
+        if (range.start > this.torrentFile.length) {
+            newStartRange = this.torrentFile.length;
+            newEndRange = this.torrentFile.length;
+            isUpdated = true;
         }
 
-
-
-        // var isUpdated = false;
-
-        // // handle unrealitic values
-        // if (range.start > range.end){
-        //     range.start = range.end
-        //     isUpdated = true;
-        // }
-        // else if (range.start > this.torrentFile.length) {
-        //     range.start = this.torrentFile.length;
-        //     range.end = this.torrentFile.length;
-        //     isUpdated = true;
-        // }
-
-        // if (range.end == 0){
-        //     range.end = range.start + this.dataChunkSize
-        //     isUpdated = true;
-        // }
-
-        // // handling for the realife
-        // if (range.end > this.torrentFile.length){
-        //     range.end = this.torrentFile.length
-        //     isUpdated = true;
-        // }
-        // // idle condittion 
-        // else {
-        //     console.log(1111)
-        //     var temp = range.start + this.dataChunkSize
-        //     if (temp != range.end) {
-        //         range.end = temp
-        //         isUpdated = true;
-        //     }
-        // }
-
-        // #############
-        // #############
-        // #############
-        // #############
-        // #############
-        // #############
-
-        // if (range.start > range.end || range.end == 0) {
-        //     // if data is inverse and end is null just send next dataChunkSize bytes 
-        //     var newEndRange = range.start + this.dataChunkSize
-        //     isUpdated = true;
-
-        // } else if (range.end > this.torrentFile.length) {
-
-        //     // if end is greater then file length
-        //     var newEndRange = Math.min(
-        //         range.start + this.dataChunkSize,
-        //         this.torrentFile.length - 1
-        //     );
-        //     isUpdated = true;
-
-        // }
-
-        // range.end = newEndRange
-        // if (range.start >= range.end) {
-        //     range.start = this.torrentFile.length - this.dataChunkSize
-        //     range.end = this.torrentFile.length
-        //     // console.log("1",range);
-        // }
-
-        console.log(range)
+        // if there is any change in value 
+        range.start = newStartRange
+        range.end = newEndRange
+        // console.log(range);
 
         return new Array(range, isUpdated)
     }

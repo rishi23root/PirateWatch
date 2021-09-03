@@ -17,7 +17,7 @@ class Torrent {
         torrentTimeOut = 0.5,
         distructorIntervalTime = 3,
         dataChunkSizeInmb = 0.75,
-        cacheRequestCount = 15,
+        cacheRequestCount = 10,
         cacheTimeoutInMinutes = 0.5
     ) {
         this.URI = URI;
@@ -184,7 +184,7 @@ class Torrent {
 
     // get indexes with this extention from the dict
     getMetadataOfExtention(reqExtention) {
-        console.log("getMetadataOfExtention()");
+        // console.log("getMetadataOfExtention()");
         // to return the metadata for the specific files to show 
 
         return this.fileHandlerdata.filter(ele => {
@@ -195,7 +195,7 @@ class Torrent {
 
     // metadata for the files from dict
     getMetadata() {
-        console.log("getMetadata()");
+        // console.log("getMetadata()");
         // to return the metadata for the file to show 
 
         return this.fileHandlerdata.map(ele => {
@@ -209,7 +209,7 @@ class Torrent {
 
     // need some work here ###################
     getStream(fileIndex, start, end) {
-        console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
+        // console.log(`getStream(fileIndex=${fileIndex}, start=${start}, end=${end})`);
         // return {header,stream}
 
         // update new request take place
@@ -239,7 +239,7 @@ class Torrent {
     // just for the testing 
     testing() {
         console.log("testing()");
-        // console.log(this.getMetadata())
+        console.log(this.getMetadata())
         console.log(this.getMetadataOfExtention('mp4'));
     }
 

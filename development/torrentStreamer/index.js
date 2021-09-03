@@ -4,26 +4,23 @@ const app = require('express')();
 const store = {};
 const xMinutes = 10;
 
+
+
 // timeout to check for achivied torrent instances and remove them from store 
 setInterval(() => {
-    // console.log('remove intervalfired')
-    const toRemove = [] // store the key to remove from the store 
     for (const key in store) {
         // console.log('Itrate over -',key);
-        if (Object.hasOwnProperty(key)) {
-            const torrentInstance = store[key];
+        store[key].then( handler => {
+            // console.log(handler.isAlive)
             // if instance is closed the remove it form the store 
-            if (!torrentInstance.isAlive) {
-                toRemove.push(key)
+            if (!handler.isAlive) {
+                delete store[key];
             }
-        }
+        })
     }
-    toRemove.forEach(element => {
-        console.log('removed -',element);
-        delete Employee[element];
-    });
-    
-}, xMinutes*1000*60 ); //x minutes 
+}, 1000); //x minutes
+
+
 
 
 
@@ -41,32 +38,31 @@ app.get('/:magnetURI', (req, res) => {
 app.get('/video/:videoName', async (req, res, next) => {
     // args - file index and  validation strings 
     // Ensure there is a range given for the video
-    const videoName = req.params.videoName
+    const videoName = decodeURI(req.params.videoName).trim()
+    
     // console.log(videoName);
     const rangeStart = Number((req.headers.range).replace(/\D/g, ""));
     console.log(1, req.headers.range, rangeStart);
 
     if (store[videoName] == undefined) {
-        store[videoName] = torrent.TorrentHandler(decodeURI(videoName))
+        store[videoName] = torrent.TorrentHandler(videoName)
     }
 
     store[videoName]
         .then(handler => {
             // console.log("Torrent is already define0..");
-
-
-
-
-            // update it for the file with video index and bigest size when there are then 2 same file types ###
-            const neededIndex = handler.getMetadata().sort((x, y) => y.size - x.size)[0]
-            // console.log(neededIndex);
-
-            const results = handler.getStream(neededIndex.index, rangeStart, 0)
-            // console.log(handler.getMetadata());
-            // console.log(results['header']);
-            res.writeHead(206, results['header']);
-            results['stream'].pipe(res);
-            // console.log(results['stream']);
+            if (handler.isAlive){
+                // update it for the file with video index and bigest size when there are then 2 same file types ###
+                const neededIndex = handler.getMetadata().sort((x, y) => y.size - x.size)[0]
+                // console.log(neededIndex);
+                
+                const results = handler.getStream(neededIndex.index, rangeStart, 0)
+                // console.log(handler.getMetadata());
+                // console.log(results['header']);
+                res.writeHead(206, results['header']);
+                results['stream'].pipe(res);
+                // console.log(results['stream']);
+            }
         })
         .catch(err => next())
 
