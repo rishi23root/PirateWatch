@@ -42,7 +42,7 @@
 
 <body>
     <div class="info">
-        Just put the magnet link in the url like /{magnet}
+        Just put the magnet link in the url like /{magnet-URI}
     </div>
     <div class="video cointainer">
         <video controls loop autoplay muted>
@@ -53,8 +53,8 @@
 </body>
 <script defer>
     let magnet = (location.pathname + location.search).substr(1)
-    console.log(magnet);
-    document.getElementById("source").src = "/video/" + magnet
+    console.log(encodeURIComponent(magnet));
+    document.getElementById("source").src = "/video/" + encodeURIComponent(magnet)
 </script>
 
 </html>

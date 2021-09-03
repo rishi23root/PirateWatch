@@ -18,3 +18,7 @@ make the first paint of the vidio to be smooth
     take a look on that 
 download a frame to show the points in the vidoes when hover on the 
 update for threading in Downloader to be more faster
+
+
+fix issue of request from middle out range 
+fix this clint side  

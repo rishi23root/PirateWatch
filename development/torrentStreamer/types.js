@@ -115,6 +115,7 @@ const ContentTypes = {
     "MOV": "video/quicktime",
     "MP3": "audio/mpeg",
     "MP4": "video/mp4",
+    "MKV": "video/mkv",
     "MPA": "audio/mpeg",
     "MPG": "video/mpeg",
     "MSG": "application/octet-stream",

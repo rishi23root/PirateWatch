@@ -3,7 +3,7 @@
 const NodeCache = require("node-cache");
 
 const cacheObj = {
-    ttl: 0, // default expire time 
+    ttl: 0, // default expire time @updated in teh class itself 👍
     useClones: false, // to use reference rather then object copies 
     deleteOnExpire: true, // to save the memory
 }
@@ -15,8 +15,8 @@ class DataBank {
 
         this.isDataBaInitilized = false;
         this.lastKeyRequest = null;
-        this.cacheObj = cacheObj
         this.ttl = timeoutInMinutes*60*1000 // cache timeout - 5sec 
+        this.cacheObj = cacheObj
         this.cacheObj.ttl = this.ttl
     }
 

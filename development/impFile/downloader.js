@@ -18,8 +18,8 @@ that data to extract the use full data only from the torrent file
 
 
 // steps of testing the server
-1. create simple downloader
-2. modify for all the events to render the buffer
+// 1. create simple downloader
+// 2. modify for all the events to render the buffer
 
 
 var WebTorrent = require('webtorrent')

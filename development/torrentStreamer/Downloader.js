@@ -4,18 +4,18 @@ const ContentTypes = require("./types");
 const util = require('./util');
 const path = require('path');
 
-const notStreamingFileSize = 2*(1024 ** 2) // 2mb
+const notStreamingFileSize = 2 * (1024 ** 2) // 2mb
 
 // responsible for only one file 
 
 class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
-    constructor(file, 
-                dataChunkSizeInmb = 0.75, 
-                cacheRequestCount = 15 ,
-                cacheTimeoutInMinutes = 2, 
-                useCacheMemory = true
-                ) {
+    constructor(file,
+        dataChunkSizeInmb = 0.75,
+        cacheRequestCount = 15,
+        cacheTimeoutInMinutes = 2,
+        useCacheMemory = true
+    ) {
         // testing console.log(`Downloader Constructor(object of file =${file.name})`);
 
         super(cacheTimeoutInMinutes)
@@ -23,7 +23,7 @@ class Downloader extends DataBank {
         this.isDownloaderInitilized = false // to save most of the memory
 
         // args to accepts
-        this.dataChunkSize = dataChunkSizeInmb * (1024**2) // 750 kb
+        this.dataChunkSize = dataChunkSizeInmb * (1024 ** 2) // 750 kb
         this.cacheRequestCount = cacheRequestCount; // no. of requests which will soted after a request made in the database
         this.useCacheMemory = useCacheMemory
 
@@ -51,7 +51,7 @@ class Downloader extends DataBank {
     }
 
     Close() {
-        // testing console.log(`Downloader Close()`);
+        console.log(`Downloader Close()`);
 
         // close the cache 
         if (this.useCacheMemory) {
@@ -70,7 +70,8 @@ class Downloader extends DataBank {
     checkRange(range) {
         // testing console.log(`Downloader checkRange({start:${range.start},end:${range.end}})`);
         // check the range request in range and return new range and isUpdated 
-        // returns a array updated range and isUpdated boo
+        // returns a array with 2 variables updated range and isUpdated bool value
+        console.log(range);
 
         var isUpdated = false;
         if (range.start > range.end || range.end == 0) {
@@ -96,10 +97,78 @@ class Downloader extends DataBank {
             range.end = newEndRange
             return new Array(range, true)
         } else {
-
             // not updated 
             return new Array(range, false)
         }
+
+
+
+        // var isUpdated = false;
+
+        // // handle unrealitic values
+        // if (range.start > range.end){
+        //     range.start = range.end
+        //     isUpdated = true;
+        // }
+        // else if (range.start > this.torrentFile.length) {
+        //     range.start = this.torrentFile.length;
+        //     range.end = this.torrentFile.length;
+        //     isUpdated = true;
+        // }
+
+        // if (range.end == 0){
+        //     range.end = range.start + this.dataChunkSize
+        //     isUpdated = true;
+        // }
+
+        // // handling for the realife
+        // if (range.end > this.torrentFile.length){
+        //     range.end = this.torrentFile.length
+        //     isUpdated = true;
+        // }
+        // // idle condittion 
+        // else {
+        //     console.log(1111)
+        //     var temp = range.start + this.dataChunkSize
+        //     if (temp != range.end) {
+        //         range.end = temp
+        //         isUpdated = true;
+        //     }
+        // }
+
+        // #############
+        // #############
+        // #############
+        // #############
+        // #############
+        // #############
+
+        // if (range.start > range.end || range.end == 0) {
+        //     // if data is inverse and end is null just send next dataChunkSize bytes 
+        //     var newEndRange = range.start + this.dataChunkSize
+        //     isUpdated = true;
+
+        // } else if (range.end > this.torrentFile.length) {
+
+        //     // if end is greater then file length
+        //     var newEndRange = Math.min(
+        //         range.start + this.dataChunkSize,
+        //         this.torrentFile.length - 1
+        //     );
+        //     isUpdated = true;
+
+        // }
+
+        // range.end = newEndRange
+        // if (range.start >= range.end) {
+        //     range.start = this.torrentFile.length - this.dataChunkSize
+        //     range.end = this.torrentFile.length
+        //     // console.log("1",range);
+        // }
+
+        console.log(range)
+
+        return new Array(range, isUpdated)
     }
 
     get(range) {
@@ -112,7 +181,7 @@ class Downloader extends DataBank {
 
             if (util.isNumberAroundBy(
                 this.torrentFile.length,
-                notStreamingFileSize,0.5
+                notStreamingFileSize, 0.5
             )) {
 
                 response['header'] = this.header
@@ -127,9 +196,10 @@ class Downloader extends DataBank {
         // check and update end-range 
         range = this.checkRange(range)[0]
 
+
         // update headers
         this.setHeader(range)
-        response['header'] = this.header    
+        response['header'] = this.header
 
         // this.useCacheMemory && // testing console.log("stored data", this.getKeyValue(range.start))
         if (this.useCacheMemory && this.getKeyValue(range.start)) {
@@ -182,7 +252,6 @@ class Downloader extends DataBank {
 
     downloadAndSaveNext(range) {
         // testing console.log(`Downloader downloadAndSaveNext(range :{start:${range.start},end:${range.end}})`);
-
         // make the next request instant and rep other in thread
         var newRange = {};
         for (let index = 1; index < this.cacheRequestCount + 1; index += 1) {
@@ -194,11 +263,12 @@ class Downloader extends DataBank {
             if (!this.validateKey(newRange.start)) {
                 // check range 
                 newRange = this.checkRange(newRange)[0]
+                // console.log("new 1",newRange);
                 this.downloadAndGet(newRange, true)
             } else {
-                // testing console.log(newRange);
+                // testing 
+                // console.log(" 1 ",newRange);
             }
-
         }
     }
 
