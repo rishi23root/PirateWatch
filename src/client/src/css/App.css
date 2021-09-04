@@ -1,0 +1,86 @@
+.App {
+  text-align: center;
+  display: flex ;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: auto;
+}
+
+nav {
+  display: flex ;
+  align-items: center;
+  padding: 3em 1em ;
+  transition: 600ms ease-in-out;
+}
+
+.empty{
+  height: 80vh;
+  position: relative;
+  top:  8em;
+}
+
+.officialNav{
+  height: 9vh;
+}
+
+.flexAndCenter{
+  display: flex ;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1.2em;
+  margin: auto;
+}
+
+.headName{
+  transition: 500ms ease-in-out;
+  /* transition-delay: 100ms; */
+}
+
+.big{
+  position: absolute;
+  top: 0.2em;
+  font-size: 10em;
+}
+
+.small{
+  font-size: 4em;
+}
+
+.search-field {
+  width: 90vw;
+}
+
+.Show-value{
+  /* border: 2px solid black; */
+  width: 90vw;
+  font-weight: 600;
+  font-size: 2em;
+  text-align: start;
+  padding: 0 1em ;
+  transition: all 1s;
+  animation: searchit 1s ease-in-out  ;
+}
+
+@keyframes searchit {
+  from {
+    opacity: 0;
+    height: 10px;
+  }
+  to{
+    opacity: 1;
+    height: auto;
+  }
+  
+}
+
+.Show-value .spamSearchingFor{
+  font-weight: 500;
+}
+
+.Show-value .Searchvalue{
+  font-weight: 400;
+  font-style: italic;
+}
+
