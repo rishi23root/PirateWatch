@@ -1,3 +1,15 @@
+<!-- next updates for finalize the torrent streamer -->
+update index .html to show data according to the requirement 
+1. fetch the metadata and 
+   display to the user list of different things in the request  
+   on click on the perticular thing in the list 
+   show to the user that item from the list according to the type of the data  
+2. request for the specific data type (now just basic text and video data)
+
+
+<!-- update the torrent streamer into the full api base front end -->
+<!-- and try to make it completely client side (browseify the package)  -->
+
 to download videos in webtorrent node - https://www.youtube.com/watch?v=CekCtDgacfw
 
 this whole project is my whole idea
