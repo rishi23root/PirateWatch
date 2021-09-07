@@ -189,7 +189,12 @@ class Torrent {
 
         return this.fileHandlerdata.filter(ele => {
             if (ele.extention == reqExtention)
-                return ({ index: ele.index, name: ele.name, extention: ele.extention, length: ele.length });
+                return ({
+                    index: ele.index,
+                    name: ele.name,
+                    extention: ele.extention,
+                    length: ele.length
+                });
         })
     }
 

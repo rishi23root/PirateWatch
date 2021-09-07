@@ -10,7 +10,7 @@ const xMinutes = 10;
 setInterval(() => {
     for (const key in store) {
         // console.log('Itrate over -',key);
-        store[key].then( handler => {
+        store[key].then(handler => {
             // console.log(handler.isAlive)
             // if instance is closed the remove it form the store 
             if (!handler.isAlive) {
@@ -18,10 +18,7 @@ setInterval(() => {
             }
         })
     }
-}, 1000); //x minutes
-
-
-
+}, xMinutes * 60 * 1000); //x minutes
 
 
 app.get('/', (req, res) => {
@@ -29,33 +26,41 @@ app.get('/', (req, res) => {
     res.redirect("/" + testA)
 })
 
+// update it to show metadata of the torrent and initilize the torrent on the request 
 app.get('/:magnetURI', (req, res) => {
     res.status(200)
     res.sendFile(__dirname + "/video.html");
 })
+
+// create a route to show different types of data according to the request (torrent metadat )
+// maybe api end point 
+// like image or video data or text data in the browser
+
 
 // streaming 
 app.get('/video/:videoName', async (req, res, next) => {
     // args - file index and  validation strings 
     // Ensure there is a range given for the video
     const videoName = decodeURI(req.params.videoName).trim()
-    
+
     // console.log(videoName);
     const rangeStart = Number((req.headers.range).replace(/\D/g, ""));
-    console.log(1, req.headers.range, rangeStart);
+    console.log(1, req.headers.range, rangeStart); // ## for testing 
 
     if (store[videoName] == undefined) {
         store[videoName] = torrent.TorrentHandler(videoName)
     }
-
+    store[videoName].then(handler => console.log(
+        handler.getMetadata()
+    ))
     store[videoName]
         .then(handler => {
             // console.log("Torrent is already define0..");
-            if (handler.isAlive){
+            if (handler.isAlive) {
                 // update it for the file with video index and bigest size when there are then 2 same file types ###
                 const neededIndex = handler.getMetadata().sort((x, y) => y.size - x.size)[0]
                 // console.log(neededIndex);
-                
+
                 const results = handler.getStream(neededIndex.index, rangeStart, 0)
                 // console.log(handler.getMetadata());
                 // console.log(results['header']);

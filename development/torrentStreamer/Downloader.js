@@ -9,6 +9,9 @@ const notStreamingFileSize = 2 * (1024 ** 2) // 2mb
 // responsible for only one file 
 
 
+// use promises.all to get the all request at once 
+
+
 // try to update it for concurouncy and in the threading 
 setImmediate
 
@@ -16,7 +19,7 @@ class Downloader extends DataBank {
     // this class will handle the request for the stream and saving the next stream type may be a file or vidoe stream form server
     constructor(file,
         dataChunkSizeInmb = 0.75,
-        cacheRequestCount = 15,
+        cacheRequestCount = 10,
         cacheTimeoutInMinutes = 2,
         useCacheMemory = true
     ) {
