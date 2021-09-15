@@ -1,1 +1,87 @@
 /* ceate card for the movie display */
+update todo
+    create fix box size
+    create fix size img
+    create text space to show correct data with write format
+    may create modal on click modal - esc or out click to exit 
+     
+
+
+.smallPost {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 17em;
+  /* height: 20.5rem; */
+  background: #ffffff;
+  border-radius: 1em;
+  border: 2px solid black;
+  overflow: hidden;
+  margin: 0.5em;
+
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.smallPost .bolt {
+  font-weight: 900;
+}
+
+.imageCointainer {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imageCointainer img{
+    width: 100%;
+    height: 100%;
+}
+
+
+.textConintainer {
+  border: 2px solid black;
+
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 0.5em;
+}
+
+.textConintainer .heading {
+  padding: 0.5em 0;
+  font-size: 1.5em;
+  font-family: Google Sans, -apple-system, BlinkMacSystemFont, "Segoe UI";
+}
+
+.textConintainer .content {
+  font-size: 1.4em;
+  font-family: Google Sans, -apple-system, BlinkMacSystemFont, "Segoe UI";
+  font-weight: 400;
+}
+
+/* .textConintainer .moreintext{
+    
+  } */
+
+.shareCointainer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 0.7em 0.1em;
+}
+.shareCointainer .icon {
+  margin: 0 1.5em 0 0.2em;
+}
+
+.shareCointainer .readmore {
+  font-size: 1.5em;
+  position: absolute;
+  right: 15px;
+}
+img {
+  width: 100%;
+}
