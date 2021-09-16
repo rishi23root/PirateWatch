@@ -92,9 +92,33 @@ nav {
 
 .showCards {
   margin-top: 3em;
-  /* border: 2px solid black; */
   justify-content: center;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+}
+
+.dotloading{
+  /* width: 100%; */
+  min-width: 20em;
+  text-align: start;
+  font:  Impact;
+}
+
+.dotloading:after {
+  content: "";
+  animation: dots 1.2s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    content: " .";
+  }
+  50% {
+    content: " . .";
+  }
+  80% {
+    content: " . . .";
+  }
 }
