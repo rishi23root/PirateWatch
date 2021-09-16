@@ -1,18 +1,18 @@
 /* ceate card for the movie display */
-update todo
-    create fix box size
-    create fix size img
+/* update todo
     create text space to show correct data with write format
-    may create modal on click modal - esc or out click to exit 
-     
-
+    may create modal on click modal - esc or out click to exit  */
 
 .smallPost {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
+  justify-content: space-between;
   align-items: center;
-  width: 17em;
+  min-width: 17em;
+  max-width: 17em;
+  min-height: 32em;
+  max-height: 32em;
   /* height: 20.5rem; */
   background: #ffffff;
   border-radius: 1em;
@@ -26,6 +26,13 @@ update todo
   -webkit-backdrop-filter: blur(0px);
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 200ms ease-in-out;
+
+  cursor: pointer;
+}
+
+.smallPost:hover{
+  transform: scale(1.05);
 }
 
 .smallPost .bolt {
@@ -33,55 +40,67 @@ update todo
 }
 
 .imageCointainer {
-  width: 100%;
+  min-width: 200px;
+  min-height: 300px;
+  max-height: 350px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
-.imageCointainer img{
-    width: 100%;
-    height: 100%;
+.imageCointainer .ImageItself {
+  width: 100%;
+  height: 350px;
 }
 
 
+/* text data */
 .textConintainer {
-  border: 2px solid black;
-
+  flex-grow:1;
+  padding: 0.3em 0.2em;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.5em 0.5em;
+  justify-content: center;
 }
 
 .textConintainer .heading {
-  padding: 0.5em 0;
   font-size: 1.5em;
   font-family: Google Sans, -apple-system, BlinkMacSystemFont, "Segoe UI";
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 10.5em;
+  padding: 0 0.2em;
 }
 
 .textConintainer .content {
-  font-size: 1.4em;
+  flex-grow: 0;
+  font-size: 1.2em;
   font-family: Google Sans, -apple-system, BlinkMacSystemFont, "Segoe UI";
   font-weight: 400;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
-/* .textConintainer .moreintext{
-    
-  } */
-
-.shareCointainer {
-  margin-top: auto;
+.baseline{
   display: flex;
-  align-items: center;
-  padding: 0 0.7em 0.1em;
-}
-.shareCointainer .icon {
-  margin: 0 1.5em 0 0.2em;
+  justify-content: space-between;
+  padding: 0 0.9em;
 }
 
-.shareCointainer .readmore {
-  font-size: 1.5em;
-  position: absolute;
-  right: 15px;
+.moreintext{
+  text-align: end;
 }
-img {
-  width: 100%;
+
+
+
+.displayNone{
+  display: none;
 }
