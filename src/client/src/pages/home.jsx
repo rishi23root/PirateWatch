@@ -7,13 +7,26 @@ import MovieCard from '../components/MovieCard';
 // import * as Types from "../redux/types";
 import Key from "../redux/keys";
 
+
+// update store to save the 
+// metadata
+// torrent info and url to make request from the server
+
+// add the store on click of the movie cards to show info of that movie 
+// in back get the torrent link for that movie and how the movie info 
+// and get the metadata for the torrent and add the info on the page and in the store
+// and link to redirect the movie pages and to show the movies info page - https://reactrouter.com/web/api/Link 
+    
+
 // const searchByNameURI = (name) => `https://api.tvmaze.com/search/shows?q=${name}`
 const searchByNameURI = (name, api_key) => `https://api.themoviedb.org/4/search/movie?api_key=${api_key}&query=${encodeURI(name)}`
 
 function Home({ }) {
     const [SearchValue, setSearchValue] = useState('');
     const [JsonResponse, setJsonResponse] = useState([]);
-    const [APIKey, setAPIKey] = useState('')
+    const [APIKey, setAPIKey] = useState('');
+    const [timeout, settimeout] = useState(false);
+    const allTimeouts = []
 
     function fetchByName(value, APIkey = APIKey) {
         var URI = searchByNameURI(value, APIkey)
@@ -23,10 +36,10 @@ function Home({ }) {
                 .then(res => res.json())
                 .then(res => {
                     try {
-                        console.log(res.results);
+                        // console.log(res.results);
                         setJsonResponse(res.results)
                     } catch {
-                        console.log(`1234`);
+                        // console.log(`1234`);
                         setJsonResponse([])
                     }
                 })
@@ -34,6 +47,14 @@ function Home({ }) {
         } else {
             return
         }
+    }
+
+    function loaderTimeout() {
+        console.log(12354);
+        const newt = setTimeout(() => {
+            settimeout(true)
+        }, 5 * 1000);
+        allTimeouts.push(newt);
     }
 
     useEffect(() => {
@@ -51,8 +72,11 @@ function Home({ }) {
         //     }
         // }
         setJsonResponse([])
-        return () =>{
+        // loaderTimeout()
+
+        return () => {
             setJsonResponse([])
+            settimeout(false)
         }
     }, [])
 
@@ -73,10 +97,14 @@ function Home({ }) {
                         onChange={(event) => {
                             setSearchValue(event.target.value);
                             fetchByName(event.target.value, APIKey);
-                            if (event.target.value == ""){
+                            if (event.target.value == "") {
                                 setJsonResponse([])
                             }
-                            console.log(JsonResponse);
+                            // console.log(JsonResponse);
+
+                            // remove all the timeout from list and then do it
+                            allTimeouts.map(ele=>clearTimeout(ele));
+                            settimeout(false);
                         }}
                     />
                 </nav>
@@ -89,15 +117,26 @@ function Home({ }) {
                     JsonResponse.map(
                         element => {
                             if (element.poster_path) {
-                                return <MovieCard key={element.id} {...element} />
+                                // console.log(element);
+                                return <MovieCard
+                                    key={element.id}
+                                    {...element}
+                                />
                             }
                         }
                     )
                 }
                 {
-                    (SearchValue.trim() != "") 
-                    && JsonResponse.length == 0 
-                    && <h1> 😟 Noting to show ¯\_(ツ)_/¯</h1>
+                    (SearchValue.trim() != "")
+                    && JsonResponse.length == 0
+                    && (
+                        timeout  // check for new changes for switch base 
+                            ? <h1> 😟 Noting to show ¯\_(ツ)_/¯ </h1>
+                            : <h1
+                                onLoad={loaderTimeout()}
+                                className="dotloading">
+                                👷‍♂️ Working HARD to get Results
+                            </h1>)
                 }
             </div>
         </div>
