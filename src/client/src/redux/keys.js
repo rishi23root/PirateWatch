@@ -26,8 +26,8 @@ class getKey {
     }
 
     del(index) {
-        var index = this.keys.indexOf(index);
-        this.keys.splice(index, 1);
+        var thatindex = this.keys.indexOf(index);
+        this.keys.splice(thatindex, 1);
     }
 
 }
