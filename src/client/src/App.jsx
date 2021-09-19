@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@material-ui/core/TextField';
-import ShowInputValue from './components/ShowInputValue';
 import './css/App.css';
-import Image from './components/Image';
-
 import { Route, Switch } from "react-router-dom"
 import Home from './pages/home';
+import ShowTorrent from './pages/ShowTorrent';
 
 // create routes 
 // setup redux and create different folders to store components 
 // add lazy-loading for the images 
-
 
 
 function App() {
@@ -18,8 +14,8 @@ function App() {
     <React.Fragment>
       <Switch>
         <Route exact path="/" component={Home} />
-        {/* <Route path="/admin" component={Admin} />
-      <Route path="/fullpost" component={Fullpost} /> */}
+        <Route path="/torrent" component={ShowTorrent} />
+        {/* <Route path="/fullpost" component={Fullpost} /> */}
       </Switch>
     </React.Fragment>
   )
