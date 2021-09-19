@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "redux": "^4.1.1"
+    "framer-motion": "^4.1.17"
   }
 }
