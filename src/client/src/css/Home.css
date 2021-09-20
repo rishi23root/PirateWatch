@@ -55,6 +55,26 @@ nav {
   font-size: 4em;
 }
 
+@media screen and (max-width: 400px) {
+  .big {
+    font-size: 5em;
+  }
+  .small {
+    font-size: 2.9em;
+    padding: 0.251em 0;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .big {
+    font-size: 5.5em;
+  }
+  .small {
+    font-size: 3.7em;
+    padding: 0.251em 0;
+  }
+}
+
 .search-field {
   width: 90vw;
 }
@@ -98,11 +118,11 @@ nav {
   flex-wrap: wrap;
 }
 
-.dotloading{
+.dotloading { 
   /* width: 100%; */
   min-width: 20em;
   text-align: start;
-  font:  Impact;
+  font: Impact;
 }
 
 .dotloading:after {
