@@ -3,10 +3,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from '../components/Image';
 import '../css/modelForMovie.css';
 
-import * as Types from "../redux/types";
-import { store, updateMagnet } from "../redux/store";
-
-
 
 function ModelForMovie(props) {
     const { title, poster_path, overview, vote_average, release_date, adult, original_language, updateInfo } = props;
