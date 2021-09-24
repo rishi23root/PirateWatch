@@ -24,3 +24,7 @@ export const updateMagnet = (newMagnet) => {
         payload: newMagnet
     })
 }
+
+export const getMagnet = () => {
+    return store.getState().magnet;
+}
