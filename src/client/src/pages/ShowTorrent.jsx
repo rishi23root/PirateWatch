@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { updateMagnet, getMagnet } from "../redux/store";
 import queryString from 'query-string';
 import { useParams } from "react-router-dom";
@@ -9,40 +9,49 @@ import { useParams } from "react-router-dom";
 
 
 // function to get the paramer NAME value from the url 
-function getParamName() {
+function getParamName(name) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const page_type = urlParams.get('name');
+    const page_type = urlParams.get(name);
     // get its value and if not return ''   
     return page_type || '';
 }
 
+function getTorrentData() {
+    return new Promise((resolve, rejects) => {
+        fetch(`/getTorrent/${getParamName('name')} ${getParamName('year')}`)
+            .then(res => res.json())
+            .then(res => resolve({ ...res }))
+            .catch(err => rejects(err))
+    })
+}
+
+
 function ShowTorrent() {
+    const [torrentData, settorrentData] = useState({})
     useEffect(() => {
         // updateMagnet(" new magnet here 1");
 
         // redirect the page if name param not found
-        if (getParamName().length == 0) {
+        if (getParamName('name').length == 0) {
             document.location.href = '/'
         }
-        return () => {
-        }
+
+        getTorrentData().then(res => settorrentData(res))
     }, [])
 
     return (
         <>
             <div className="headingName">
-                {getParamName()}
+                {getParamName('name')}
             </div>
-            <table>
-                {/* map here to  */}
-                <td>
-                    <th>count</th>
-                    <th>Name</th>
-                    <th>seeder</th>
-                    <th>reciever</th>
-                </td>
-            </table>
+            <div className="conintainer">
+                {Object.keys(torrentData).map((item, i) => (
+                    <li className="travelcompany-input" key={i}>
+                        <span className="input-label">key: {i} Name: {torrentData[i].title}</span>
+                    </li>
+                ))}
+            </div>
         </>
     )
 }
