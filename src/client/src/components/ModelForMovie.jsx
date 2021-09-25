@@ -17,7 +17,7 @@ function ModelForMovie(props) {
 
     const toTorrent = () => {
         //  redirect to the torrent infopage with the name in the url as a param 
-        document.location = "/torrent?name=" + title;
+        document.location = `/torrent?name=${title}&year=${release_date.split("-",1)[0]}`;
     }
 
     useEffect(() => {
