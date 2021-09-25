@@ -11,12 +11,6 @@ import ModelForMovie from '../components/ModelForMovie';
 // import * as Types from "../redux/types";
 // import { store, updateMagnet } from "../redux/store";
 
-
-
-// update store to save the 
-// metadata
-// torrent info and url to make request from the server
-
 // add the store on click of the movie cards to show info of that movie 
 // in back get the torrent link for that movie and how the movie info 
 // and get the metadata for the torrent and add the info on the page and in the store
@@ -153,9 +147,9 @@ function Home() {
                                     if (element.poster_path) {
                                         // console.log(element);
                                         return <MovieCard
-                                            onClick={()=>{
+                                            onClick={() => {
                                                 // console.log({...element})
-                                                setMovieInfo({...element,})
+                                                setMovieInfo({ ...element, })
                                             }}
                                             key={element.id}
                                             {...element}
@@ -181,13 +175,13 @@ function Home() {
                         }
                     </AnimatePresence>
                 </motion.div>
-                
+
                 {/* model */}
                 <AnimatePresence>
-                    {MovieInfo && 
-                        <ModelForMovie 
-                            {...MovieInfo} 
-                            updateInfo={()=>setMovieInfo(null)} 
+                    {MovieInfo &&
+                        <ModelForMovie
+                            {...MovieInfo}
+                            updateInfo={() => setMovieInfo(null)}
                         />
                     }
                 </AnimatePresence>
