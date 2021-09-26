@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { updateMagnet, getMagnet } from "../redux/store";
-import queryString from 'query-string';
-import { useParams } from "react-router-dom";
+import '../css/showTorrent.css';
 
 // update the magnet
 // show selected torrent
@@ -29,6 +28,8 @@ function getTorrentData() {
 
 function ShowTorrent() {
     const [torrentData, settorrentData] = useState({})
+    const [loading, setloading] = useState(true)
+    const [UnableToFetch, setUnableToFetch] = useState(false)
     useEffect(() => {
         // updateMagnet(" new magnet here 1");
 
@@ -37,9 +38,19 @@ function ShowTorrent() {
             document.location.href = '/'
         }
 
-        getTorrentData().then(res => settorrentData(res))
+        setTimeout(() => {
+            setUnableToFetch(true)
+            setloading(false)
+        }, 1000 * 60);
+
+        getTorrentData().then(res => {
+            settorrentData(res)
+            setloading(false)
+        })
     }, [])
 
+    // features
+    console.log();
     return (
         <>
             <div className="headingName">
@@ -51,6 +62,19 @@ function ShowTorrent() {
                         <span className="input-label">key: {i} Name: {torrentData[i].title}</span>
                     </li>
                 ))}
+
+                {/* {show loading for 1 min if torrentData is {} } */}
+                {
+                    loading &&
+                    <h1 className="loding">loading...</h1>
+                }
+                {
+                    Object.keys(torrentData).length === 0 &&
+                    UnableToFetch &&
+                    <h1 className="UnableToFetch">
+                        unable to fetch
+                    </h1>
+                }
             </div>
         </>
     )
