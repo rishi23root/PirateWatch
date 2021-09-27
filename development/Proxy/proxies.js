@@ -1,7 +1,7 @@
 const request = require('request');
 const cheerio = require('cheerio');
 
-const getProxies = () => {
+const FetchProxies = () => {
     return new Promise((resolve, reject) => {
         const ProxyData = []
         request("https://sslproxies.org/", async (error, response, html) => {
@@ -29,6 +29,13 @@ const getProxies = () => {
     })
 }
 
-let a = getProxies().then(
+
+function proxy(){
+    // take one proxy address and del it from the list and test it 
+    // if succes then return it else try it for other 3 time if any of those worked then use that  
+    // or just it for next 5 mins 
+}
+
+let a = FetchProxies().then(
     a => console.log(a)
 )
