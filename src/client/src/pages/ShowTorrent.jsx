@@ -57,13 +57,15 @@ function ShowTorrent() {
                 {getParamName('name')}
             </div>
             <div className="conintainer">
+
+                {/* update the data to be in the table format and animated */}
                 {Object.keys(torrentData).map((item, i) => (
                     <li className="travelcompany-input" key={i}>
-                        <span className="input-label">key: {i} Name: {torrentData[i].title}</span>
+                        <span >Size: {torrentData[i].size} Name: {torrentData[i].title}</span>
                     </li>
                 ))}
 
-                {/* {show loading for 1 min if torrentData is {} } */}
+                {/* show loading for 1 min if torrentData is empty*/}
                 {
                     loading &&
                     <h1 className="loding">loading...</h1>
@@ -72,7 +74,7 @@ function ShowTorrent() {
                     Object.keys(torrentData).length === 0 &&
                     UnableToFetch &&
                     <h1 className="UnableToFetch">
-                        unable to fetch
+                        unable to fetch or no data found
                     </h1>
                 }
             </div>
