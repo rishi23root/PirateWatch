@@ -1,16 +1,16 @@
 import html
 from bs4 import BeautifulSoup as bs
+import urllib.parse
 import requests
+from pprint import pprint
 
-class main:
-
+class Torrent:
 	def __init__(self, q, limit=15):
 		""" piratebay search engine
 			q         : query for search
 			limit     : maximum result count
 		"""
-		self.framework = main.framework
-		self.q = self.framework.urlib(q).quote 
+		self.q = urllib.parse.quote(q)
 		self.max = limit
 		self._rawhtml = ''
 		self._torrents = []
@@ -18,14 +18,17 @@ class main:
 		self._rows = []
 		self._links_with_data = []
 
+		self.run_crawl()
+
 	def run_crawl(self):
 		url = f'https://tpb.party/search/{self.q}'
 		try:
-			req = self.framework.request(url=url)
+			req = requests.get(url=url)
 		except:
-			self.framework.error('Try again after a few seconds!', 'util/piratebay', 'run_crawl')
+			pprint('[Error] - Try again after a few seconds!')
 		else:
 			soup = bs(req.text, 'html.parser')
+			# print(soup)
 			self._torrents = soup.find_all('tr')[1:-1]
 
 	@property
@@ -61,3 +64,9 @@ class main:
 				})
 
 		return self._links_with_data
+
+	
+if __name__ == "__main__":
+	Data = Torrent("avengers")
+	pprint(Data.raw)
+	pprint(Data.links_with_data)
